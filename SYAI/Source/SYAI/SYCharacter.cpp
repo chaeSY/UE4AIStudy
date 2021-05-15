@@ -66,8 +66,8 @@ void ASYCharacter::NextCharcater()
 		{
 			//Character->AC->UnPossess();
 			c->UnPossess();
+			c->Possess(Character);
 			AC->Possess(this);
-			//c->Possess(Character);
 			break;
 		}
 	}

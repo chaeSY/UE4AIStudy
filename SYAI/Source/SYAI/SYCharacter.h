@@ -46,6 +46,9 @@ public:
 	UPROPERTY(Category = "AI", EditAnywhere, BlueprintReadWrite)
 	AAIController* AC;
 
+	UPROPERTY(Category = "AI", EditAnywhere, BlueprintReadWrite)
+	class UBehaviorTree* BT;
+
 private:
 	// @#todo: player character를 관리하는 매니저를 따로 두는게 좋아보임
 	static TArray<ASYCharacter*> CharacterGroup;
