@@ -3,12 +3,14 @@
 
 #include "SYPlayerAIController.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "SYCharacter.h"
 
 ASYPlayerAIController::ASYPlayerAIController()
 {
 	BTComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BTComponent"));
+	BBComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BBCopmonent"));
 }
 
 void ASYPlayerAIController::OnPossess(APawn* InPawn)
@@ -18,8 +20,9 @@ void ASYPlayerAIController::OnPossess(APawn* InPawn)
 	ASYCharacter* character = Cast<ASYCharacter>(InPawn);
 	if (character)
 	{
-		if (BTComponent)
+		if (BTComponent && BBComponent && character->BT)
 		{
+			BBComponent->InitializeBlackboard(*(character->BT->BlackboardAsset));
 			BTComponent->StartTree(*character->BT);
 		}
 	}
