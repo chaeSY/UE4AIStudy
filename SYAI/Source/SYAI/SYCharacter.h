@@ -14,40 +14,35 @@ class SYAI_API ASYCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ASYCharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override ;
+	virtual void BeginDestroy() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
 	void NextCharcater();
 
-	//virtual void PossessedBy(AController* NewController) override;
-	//virtual void UnPossessed() override;
-	// virtual void UnPossessed(); //pawn
-
-
-	UPROPERTY(Category = "GroupOrder", EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "CharacterGroup", EditAnywhere, BlueprintReadWrite)
 	int GroupOrder = 0;
 
-public:
-	UPROPERTY(Category = "AI", EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AAIController> ACClass;
-
-	UPROPERTY(Category = "AI", EditAnywhere, BlueprintReadWrite)
-	AAIController* AC;
+	UPROPERTY(Category = "CharacterGroup", EditAnywhere, BlueprintReadWrite)
+	int FollowOrder = 0;
 
 	UPROPERTY(Category = "AI", EditAnywhere, BlueprintReadWrite)
 	class UBehaviorTree* BT;
+
+
+public:
+	UFUNCTION(Category = "CharacterGroup", BlueprintCallable)
+	ASYCharacter* GetCharacterFromGroup(int order);
+
+	UFUNCTION(Category = "CharacterGroup", BlueprintCallable)
+	ASYCharacter* GetFollowingCharacterFromGroup();
 
 private:
 	// @#todo: player character를 관리하는 매니저를 따로 두는게 좋아보임

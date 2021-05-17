@@ -11,12 +11,6 @@ ASYCharacter::ASYCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	if (ACClass)
-	{
-		//StaticConstructObject
-		NewObject<AAIController>(AC, ACClass, TEXT("AC"));
-	}
-
 }
 
 // Called when the game starts or when spawned
@@ -25,14 +19,17 @@ void ASYCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CharacterGroup.Add(this);
-
-	if (ACClass)
-	{
-		//StaticConstructObject
-		AC = NewObject<AAIController>(GetWorld(), ACClass, TEXT("AC"));
-	}
-
+	FollowOrder = (GroupOrder + 2) % 3;
+	//temp
+	CurrentActivateOrder = 0;
 }
+
+void ASYCharacter::BeginDestroy()
+{
+	CharacterGroup.Remove(this);
+	Super::BeginDestroy();
+}
+
 
 // Called every frame
 void ASYCharacter::Tick(float DeltaTime)
@@ -52,23 +49,45 @@ void ASYCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ASYCharacter::NextCharcater()
 {
 	// cache player controller
-	AController* c = GetController();
+	AController* PlayerController = GetController();
+	if (!PlayerController)
+		return;
 
 	CurrentActivateOrder = ++CurrentActivateOrder % 3;
-	//UnPossessed();
-	//
-	//if(AC)
-	//	Possesse(AC);
-	
+	ASYCharacter* Character = GetCharacterFromGroup(CurrentActivateOrder);
+	if (Character)
+	{
+		// possess next character
+		PlayerController->UnPossess();
+		PlayerController->Possess(Character);
+
+		
+		SpawnDefaultController();
+	}
+}
+
+ASYCharacter* ASYCharacter::GetCharacterFromGroup(int order)
+{
 	for (auto Character : CharacterGroup)
 	{
-		if (Character->GroupOrder == CurrentActivateOrder)
+		if (Character->GroupOrder == order)
 		{
-			//Character->AC->UnPossess();
-			c->UnPossess();
-			c->Possess(Character);
-			AC->Possess(this);
-			break;
+			return Character;
 		}
 	}
+
+	return nullptr;
+}
+
+ASYCharacter* ASYCharacter::GetFollowingCharacterFromGroup()
+{
+	for (auto Character : CharacterGroup)
+	{
+		if (Character->GroupOrder == FollowOrder)
+		{
+			return Character;
+		}
+	}
+
+	return nullptr;
 }
