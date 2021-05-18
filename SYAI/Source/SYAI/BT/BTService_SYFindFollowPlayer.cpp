@@ -10,7 +10,7 @@
 UBTService_SYFindFollowPlayer::UBTService_SYFindFollowPlayer()
 	:Super()
 {
-	NodeName = "SYFindFollowPlayer";
+	NodeName = "FindFollowPlayer";
 
 	FollowPlayer.AddObjectFilter(this, FName(TEXT("FollowPlayer")), ASYCharacter::StaticClass());
 }
