@@ -59,6 +59,8 @@ void ASYCharacter::NextCharcater()
 	{
 		// possess next character
 		PlayerController->UnPossess();
+
+		Character->GetController()->Destroy();
 		PlayerController->Possess(Character);
 
 		

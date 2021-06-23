@@ -40,6 +40,4 @@ void UBTService_SYCalcDistance::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	FVector MyPos = Pawn->K2_GetActorLocation();
 	float Distance = FVector::Distance(MyPos, TargetPos);
 	BB->SetValueAsFloat(DistanceToTarget.SelectedKeyName, Distance);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), Distance));
 }
